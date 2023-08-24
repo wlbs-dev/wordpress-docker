@@ -120,4 +120,8 @@ if ( ! function_exists( 'console_log' ) ) {
     }
 }
 
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+    $_SERVER['HTTPS'] = 'on';
+}
+
 /* That's all, stop editing! Happy publishing. */

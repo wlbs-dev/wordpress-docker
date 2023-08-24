@@ -5,13 +5,13 @@ until mysqladmin ping -h db -P 3306 -u wpdbuser -pchange_me_db_password; do
     echo 'waiting for mysqld to be connectable...'
     sleep 2
 done
-if [ ! -f /var/www/html/wp-config.php ]; then
+if [ ! -f /var/www/html/mysite/wp-config.php ]; then
     echo "wp-config.php not found, resetting db..."
-    cp /root/wp-config.php /var/www/html/wp-config.php
-    cp /root/wp-cli.yml /var/www/html/wp-cli.yml
-    chown -R www-data:www-data /var/www/html
-    # change ownership of /var/www/html to 777
-    chmod -R 777 /var/www/html
+    cp /root/wp-config.php /var/www/html/mysite/wp-config.php
+    cp /root/wp-cli.yml /var/www/html/mysite/wp-cli.yml
+    chown -R www-data:www-data /var/www/html/mysite
+    # change ownership of /var/www/html/mysite to 777
+    chmod -R 777 /var/www/html/mysite
     # Backup current DB to a file
     wp db export /root/old_db.sql --allow-root
 
@@ -39,10 +39,10 @@ UPDATE wp_options SET option_value='https://staging.wlbs.dev/mysite/' WHERE opti
 EOF
 fi
 
-chown -R www-data:www-data /var/www/html
+chown -R www-data:www-data /var/www/html/mysite
 
-# change permissions of /var/www/html to 777
-chmod -R 777 /var/www/html
+# change permissions of /var/www/html/mysite to 777
+chmod -R 777 /var/www/html/mysite
 
 set +e
 # Remove object cache
