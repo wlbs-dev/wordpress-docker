@@ -21,8 +21,11 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     wp db import /root/backup.sql --allow-root
 
     # Change site paths
-    wp search-replace 'http://localhost:8000/' 'http://staging.wlbs.dev/mysite/' --allow-root --all-tables
-    wp search-replace 'http://127.0.0.1:8000/' 'http://staging.wlbs.dev/mysite/' --allow-root --all-tables
+    wp search-replace 'http://localhost:8000/' 'https://staging.wlbs.dev/mysite/' --allow-root --all-tables
+    wp search-replace 'http://127.0.0.1:8000/' 'https://staging.wlbs.dev/mysite/' --allow-root --all-tables
+    wp search-replace 'http://example.com/' 'https://staging.wlbs.dev/mysite/' --allow-root --all-tables
+    wp search-replace 'https://example.com/' 'https://staging.wlbs.dev/mysite/' --allow-root --all-tables
+    wp search-replace 'http://' 'https://' --allow-root --all-tables
 
     wp theme activate twentynineteen --allow-root
 
@@ -31,8 +34,8 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     wp rewrite flush --hard --allow-root
 
     mysql -h db -P 3306 -u wpdbuser -pchange_me_db_password -D wordpress <<EOF
-UPDATE wp_options SET option_value='http://staging.wlbs.dev/mysite/' WHERE option_name='home';
-UPDATE wp_options SET option_value='http://staging.wlbs.dev/mysite/' WHERE option_name='siteurl';
+UPDATE wp_options SET option_value='https://staging.wlbs.dev/mysite/' WHERE option_name='home';
+UPDATE wp_options SET option_value='https://staging.wlbs.dev/mysite/' WHERE option_name='siteurl';
 EOF
 fi
 
