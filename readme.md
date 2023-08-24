@@ -44,3 +44,5 @@ https://github.com/wp-cli/wp-cli/issues/1952
 
 bug fix resolutions in the past:
 when in doubt rewrite flush
+<!-- NEED TO REWRITE STRUCTURE FOR THINGS TO START WORKING -->
+wp rewrite structure '/%year%/%monthnum%/%postname%' --allow-root

@@ -28,7 +28,7 @@ services:
       WORDPRESS_DB_PASSWORD: change_me_db_password
       WORDPRESS_DB_NAME: wordpress
     volumes:
-      - ./wordpress:/var/www/html
+      - ./wordpress:/var/www/html/mysite/
       - ./script.sh:/usr/local/bin/script.sh
       - ./backup.sql:/root/backup.sql
       - ./.ssh:/root/.ssh
