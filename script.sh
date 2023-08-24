@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 # Wait for MySQL
-until mysqladmin ping -h db -P 3306 -u wordpress -pwordpress; do
+until mysqladmin ping -h db -P 3306 -u wpdbuser -pchange_me_db_password; do
     echo 'waiting for mysqld to be connectable...'
     sleep 2
 done
@@ -21,8 +21,8 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     wp db import /root/backup.sql --allow-root
 
     # Change site paths
-    wp search-replace 'http://localhost:8000' 'http://staging.wlbs.dev/mysite' --allow-root --all-tables
-    wp search-replace 'http://127.0.0.1:8000' 'http://staging.wlbs.dev/mysite' --allow-root --all-tables
+    wp search-replace 'http://localhost:8000/' 'http://staging.wlbs.dev/mysite/' --allow-root --all-tables
+    wp search-replace 'http://127.0.0.1:8000/' 'http://staging.wlbs.dev/mysite/' --allow-root --all-tables
 
     wp theme activate twentynineteen --allow-root
 
@@ -32,8 +32,8 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     wp rewrite structure "/%category%/%postname%/" --hard --allow-root
 
     mysql -h db -P 3306 -u wpdbuser -pchange_me_db_password -D wordpress <<EOF
-UPDATE wp_options SET option_value='http://staging.wlbs.dev/mysite' WHERE option_name='home';
-UPDATE wp_options SET option_value='http://staging.wlbs.dev/mysite' WHERE option_name='siteurl';
+UPDATE wp_options SET option_value='http://staging.wlbs.dev/mysite/' WHERE option_name='home';
+UPDATE wp_options SET option_value='http://staging.wlbs.dev/mysite/' WHERE option_name='siteurl';
 EOF
 fi
 
