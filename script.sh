@@ -29,7 +29,6 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     wp theme activate mysite --allow-root
 
     wp rewrite flush --hard --allow-root
-    wp rewrite structure "/%category%/%postname%/" --hard --allow-root
 
     mysql -h db -P 3306 -u wpdbuser -pchange_me_db_password -D wordpress <<EOF
 UPDATE wp_options SET option_value='http://staging.wlbs.dev/mysite/' WHERE option_name='home';

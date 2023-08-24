@@ -41,3 +41,6 @@ TODOS:
 
 Note:
 https://github.com/wp-cli/wp-cli/issues/1952
+
+bug fix resolutions in the past:
+when in doubt rewrite flush
