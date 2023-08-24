@@ -92,8 +92,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';
-define( 'WP_HOME', 'http://localhost:8000' );
-define( 'WP_SITEURL', 'http://localhost:8000' );
+define( 'WP_HOME', 'http://staging.wlbs.dev/mysite' );
+define( 'WP_SITEURL', 'http://staging.wlbs.dev/mysite' );
 
 /**
  * For developers: WordPress debugging mode.
