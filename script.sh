@@ -11,7 +11,7 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     cp /root/wp-cli.yml /var/www/html/wp-cli.yml
     chown -R www-data:www-data /var/www/html
     # change ownership of /var/www/html to 777
-    chmod -R 755 /var/www/html
+    chmod -R 777 /var/www/html
     # Backup current DB to a file
     wp db export /root/old_db.sql --allow-root
 
@@ -39,7 +39,7 @@ fi
 chown -R www-data:www-data /var/www/html
 
 # change permissions of /var/www/html to 777
-chmod -R 755 /var/www/html
+chmod -R 777 /var/www/html
 
 set +e
 # Remove object cache
