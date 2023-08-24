@@ -11,7 +11,7 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     cp /root/wp-cli.yml /var/www/html/wp-cli.yml
     chown -R www-data:www-data /var/www/html
     # change ownership of /var/www/html to 777
-    chmod -R 777 /var/www/html
+    chmod -R 755 /var/www/html
     # Backup current DB to a file
     wp db export /root/old_db.sql --allow-root
 
@@ -21,8 +21,8 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     wp db import /root/backup.sql --allow-root
 
     # Change site paths
-    wp search-replace 'https://example.com' 'http://localhost:8000' --allow-root --all-tables
-    wp search-replace 'http://example.com' 'http://localhost:8000' --allow-root --all-tables
+    wp search-replace 'http://localhost:8000' 'http://staging.wlbs.dev/mysite' --allow-root --all-tables
+    wp search-replace 'http://127.0.0.1:8000' 'http://staging.wlbs.dev/mysite' --allow-root --all-tables
 
     wp theme activate twentynineteen --allow-root
 
@@ -32,15 +32,15 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     wp rewrite structure "/%category%/%postname%/" --hard --allow-root
 
     mysql -h db -P 3306 -u wordpress -pwordpress -D wordpress <<EOF
-UPDATE wp_options SET option_value='http://localhost:8000' WHERE option_name='home';
-UPDATE wp_options SET option_value='http://localhost:8000' WHERE option_name='siteurl';
+UPDATE wp_options SET option_value='http://staging.wlbs.dev/mysite' WHERE option_name='home';
+UPDATE wp_options SET option_value='http://staging.wlbs.dev/mysite' WHERE option_name='siteurl';
 EOF
 fi
 
 chown -R www-data:www-data /var/www/html
 
 # change permissions of /var/www/html to 777
-chmod -R 777 /var/www/html
+chmod -R 755 /var/www/html
 
 set +e
 # Remove object cache
