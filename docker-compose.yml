@@ -7,10 +7,10 @@ services:
       - db_data:/var/lib/mysql
       - ./mysql-files:/var/lib/mysql-files
     environment:
-      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_ROOT_PASSWORD: change_me_root_password
       MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
+      MYSQL_USER: wpdbuser
+      MYSQL_PASSWORD: change_me_db_password
 
   wordpress:
     depends_on:
@@ -24,8 +24,8 @@ services:
       - "8000:80"
     environment:
       WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_USER: wpdbuser
+      WORDPRESS_DB_PASSWORD: change_me_db_password
       WORDPRESS_DB_NAME: wordpress
     volumes:
       - ./wordpress:/var/www/html
