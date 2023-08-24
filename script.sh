@@ -26,7 +26,7 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 
     wp theme activate twentynineteen --allow-root
 
-    wp theme activate generatepress --allow-root
+    wp theme activate mysite --allow-root
 
     wp rewrite flush --hard --allow-root
     wp rewrite structure "/%category%/%postname%/" --hard --allow-root
