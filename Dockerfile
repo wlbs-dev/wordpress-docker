@@ -20,10 +20,10 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 RUN chown -R www-data:www-data /var/www/html
 
 # Set the working directory to /var/www/html
-WORKDIR /var/www/html
+WORKDIR /var/www/html/mysite
 
-# Expose port 80
-EXPOSE 80
+# Expose port 443
+EXPOSE 443
 
 # Copy the script that changes the site paths and imports the database
 COPY ./script.sh /usr/local/bin
