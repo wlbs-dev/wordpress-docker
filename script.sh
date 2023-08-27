@@ -1,52 +1,63 @@
 #!/bin/bash
 set -e
+
+# Load environment variables from .env file
+source .env
+
 # Wait for MySQL
-until mysqladmin ping -h db -P 3306 -u wpdbuser -pchange_me_db_password; do
+until mysqladmin ping -h $WORDPRESS_DB_HOST -P 3306 -u $WORDPRESS_DB_USER -p$WORDPRESS_DB_PASSWORD; do
     echo 'waiting for mysqld to be connectable...'
     sleep 2
 done
-if [ ! -f /var/www/html/mysite/wp-config.php ]; then
-    echo "wp-config.php not found, resetting db..."
-    cp /root/wp-config.php /var/www/html/mysite/wp-config.php
-    cp /root/wp-cli.yml /var/www/html/mysite/wp-cli.yml
-    chown -R www-data:www-data /var/www/html/mysite
-    # change ownership of /var/www/html/mysite to 777
-    chmod -R 777 /var/www/html/mysite
-    # Backup current DB to a file
-    wp db export /root/old_db.sql --allow-root
 
-    wp db reset --yes --allow-root
+# Define variables
+WORK_DIR=${WORK_DIR}
+WP_CONFIG_FILE="$WORK_DIR/wp-config.php"
+WP_CLI_YML_FILE="$WORK_DIR/wp-cli.yml"
+DB_USER=$WORDPRESS_DB_USER
+DB_PASS=$WORDPRESS_DB_PASSWORD
+DB_NAME="wordpress"
+DB_HOST="db"
+
+# Check if wp-config.php exists
+if [ ! -f $WP_CONFIG_FILE ]; then
+    echo "wp-config.php not found, resetting db..."
+    cp /root/wp-config.php $WP_CONFIG_FILE
+    cp /root/wp-cli.yml $WP_CLI_YML_FILE
+    chown -R www-data:www-data $WORK_DIR
+    chmod -R 777 $WORK_DIR
+    
+    # Backup current DB to a file
+    wp db export /root/old_db.sql --allow-root --path=$WORK_DIR
+
+    wp db reset --yes --allow-root --path=$WORK_DIR
 
     # Import DB from sql file
-    wp db import /root/backup.sql --allow-root
+    wp db import /root/backup.sql --allow-root --path=$WORK_DIR
 
     # Change site paths
-    wp search-replace 'http://localhost:8000/' 'https://staging.wlbs.dev/mysite/' --allow-root --all-tables
-    wp search-replace 'http://127.0.0.1:8000/' 'https://staging.wlbs.dev/mysite/' --allow-root --all-tables
-    wp search-replace 'http://example.com/' 'https://staging.wlbs.dev/mysite/' --allow-root --all-tables
-    wp search-replace 'https://example.com/' 'https://staging.wlbs.dev/mysite/' --allow-root --all-tables
-    wp search-replace 'http://' 'https://' --allow-root --all-tables
+    wp search-replace 'http://localhost:8000/' 'https://staging.wlbs.dev/mysite/' --allow-root --all-tables --path=$WORK_DIR
+    wp search-replace 'http://127.0.0.1:8000/' 'https://staging.wlbs.dev/mysite/' --allow-root --all-tables --path=$WORK_DIR
+    wp search-replace 'http://example.com/' 'https://staging.wlbs.dev/mysite/' --allow-root --all-tables --path=$WORK_DIR
+    wp search-replace 'https://example.com/' 'https://staging.wlbs.dev/mysite/' --allow-root --all-tables --path=$WORK_DIR
+    wp search-replace 'http://' 'https://' --allow-root --all-tables --path=$WORK_DIR
 
-    wp theme activate twentynineteen --allow-root
+    wp theme activate $BACKUP_THEME_NAME --allow-root --path=$WORK_DIR
+    wp theme activate $THEME_NAME --allow-root --path=$WORK_DIR
+    wp rewrite flush --hard --allow-root --path=$WORK_DIR
 
-    wp theme activate mysite --allow-root
-
-    wp rewrite flush --hard --allow-root
-
-    mysql -h db -P 3306 -u wpdbuser -pchange_me_db_password -D wordpress <<EOF
+    mysql -h $DB_HOST -P 3306 -u $DB_USER -p$DB_PASS -D $DB_NAME <<EOF
 UPDATE wp_options SET option_value='https://staging.wlbs.dev/mysite/' WHERE option_name='home';
 UPDATE wp_options SET option_value='https://staging.wlbs.dev/mysite/' WHERE option_name='siteurl';
 EOF
 fi
 
-chown -R www-data:www-data /var/www/html/mysite
-
-# change permissions of /var/www/html/mysite to 777
-chmod -R 777 /var/www/html/mysite
+chown -R www-data:www-data $WORK_DIR
+chmod -R 777 $WORK_DIR
 
 set +e
 # Remove object cache
-rm wp-content/object-cache.php
+rm $WORK_DIR/wp-content/object-cache.php
 
 # for ssh ownership and security
 chown -R $USER:$USER /root/.ssh

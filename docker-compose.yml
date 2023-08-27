@@ -7,10 +7,10 @@ services:
       - db_data:/var/lib/mysql
       - ./mysql-files:/var/lib/mysql-files
     environment:
-      MYSQL_ROOT_PASSWORD: change_me_root_password
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wpdbuser
-      MYSQL_PASSWORD: change_me_db_password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
   wordpress:
     depends_on:
@@ -18,15 +18,14 @@ services:
     build:
       context: .
       args:
-        - GITLAB_USERNAME=${GITLAB_USERNAME}
-        - GITLAB_TOKEN=${GITLAB_TOKEN}
+        - WORK_DIR=${WORK_DIR}
     ports:
       - "8000:443"
     environment:
-      WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: wpdbuser
-      WORDPRESS_DB_PASSWORD: change_me_db_password
-      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
     volumes:
       - ./wordpress:/var/www/html/mysite/
       - ./script.sh:/usr/local/bin/script.sh

@@ -19,8 +19,11 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 # Change ownership of the /var/www/html directory to the www-data user
 RUN chown -R www-data:www-data /var/www/html
 
-# Set the working directory to /var/www/html
-WORKDIR /var/www/html/mysite
+# Declare ARG for work directory
+ARG WORK_DIR
+
+# Set the working directory using ARG
+WORKDIR ${WORK_DIR}
 
 # Expose port 443
 EXPOSE 443
