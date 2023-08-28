@@ -19,18 +19,25 @@
  * @package WordPress
  */
 
+$WORDPRESS_DB_HOST     = getenv('WORDPRESS_DB_HOST');
+$WORDPRESS_DB_USER     = getenv('WORDPRESS_DB_USER');
+$WORDPRESS_DB_PASSWORD = getenv('WORDPRESS_DB_PASSWORD');
+$WORDPRESS_DB_NAME     = getenv('WORDPRESS_DB_NAME');
+$URL_PROD              = getenv('URL_PROD');
+$URL_TESTING           = getenv('URL_TESTING');
+$IS_PROD               = getenv('IS_PROD');
+
 // ** Database settings - You can get this info from your web host ** //
-/** The name of the database for WordPress */
-define( 'DB_NAME', 'wordpress' );
+define( 'DB_NAME', $WORDPRESS_DB_NAME );
 
 /** Database username */
-define( 'DB_USER', 'wpdbuser' );
+define( 'DB_USER', $WORDPRESS_DB_USER );
 
 /** Database password */
-define( 'DB_PASSWORD', 'change_me_db_password' );
+define( 'DB_PASSWORD', $WORDPRESS_DB_PASSWORD );
 
 /** Database hostname */
-define( 'DB_HOST', 'db:3306' );
+define( 'DB_HOST', $WORDPRESS_DB_HOST . ':' . '3306' ); 
 
 /** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
@@ -92,9 +99,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';
-define( 'WP_HOME', 'https://staging.wlbs.dev/mysite/' );
-define( 'WP_SITEURL', 'https://staging.wlbs.dev/mysite/' );
 
+if ($IS_PROD === 'true') {
+    define( 'WP_HOME', $URL_PROD );
+    define( 'WP_SITEURL', $URL_PROD );
+} else {
+    define( 'WP_HOME', $URL_TESTING );
+    define( 'WP_SITEURL', $URL_TESTING );
+}
 /**
  * For developers: WordPress debugging mode.
  *
@@ -118,10 +130,6 @@ if ( defined( 'WP_DEBUG' ) && WP_DEBUG && file_exists( ABSPATH . 'wp-debug.php' 
 if ( ! function_exists( 'console_log' ) ) {
     function console_log() {
     }
-}
-
-if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
-    $_SERVER['HTTPS'] = 'on';
 }
 
 /* That's all, stop editing! Happy publishing. */
