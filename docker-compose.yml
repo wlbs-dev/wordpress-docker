@@ -19,8 +19,9 @@ services:
       context: .
       args:
         - WORK_DIR=${WORK_DIR}
+        - EXPOSE_PORT=${EXPOSE_PORT}
     ports:
-      - "8000:443"
+      - "${EXPOSE_PORT}:443"
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}

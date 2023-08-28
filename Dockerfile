@@ -22,11 +22,13 @@ RUN chown -R www-data:www-data /var/www/html
 # Declare ARG for work directory
 ARG WORK_DIR
 
+ARG EXPOSE_PORT
+
 # Set the working directory using ARG
 WORKDIR ${WORK_DIR}
 
-# Expose port 443
-EXPOSE 443
+# Expose port
+EXPOSE ${EXPOSE_PORT}
 
 # Copy the script that changes the site paths and imports the database
 COPY ./script.sh /usr/local/bin

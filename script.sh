@@ -10,22 +10,13 @@ until mysqladmin ping -h $WORDPRESS_DB_HOST -P 3306 -u $WORDPRESS_DB_USER -p$WOR
     sleep 2
 done
 
-# Define variables
-WORK_DIR=${WORK_DIR}
-WP_CONFIG_FILE="$WORK_DIR/wp-config.php"
-WP_CLI_YML_FILE="$WORK_DIR/wp-cli.yml"
-DB_USER=$WORDPRESS_DB_USER
-DB_PASS=$WORDPRESS_DB_PASSWORD
-DB_NAME=$WORDPRESS_DB_NAME
-DB_HOST=$WORDPRESS_DB_HOST
-
 # Check if wp-config.php exists
-if [ ! -f $WP_CONFIG_FILE ]; then
+if [ ! -f ${WORK_DIR}/wp-config.php ]; then
     echo "wp-config.php not found, resetting db..."
-    cp /root/wp-config.php $WP_CONFIG_FILE
-    cp /root/wp-cli.yml $WP_CLI_YML_FILE
-    chown -R www-data:www-data $WORK_DIR
-    chmod -R 777 $WORK_DIR
+    cp /root/wp-config.php ${WORK_DIR}/wp-config.php
+    cp /root/wp-cli.yml ${WORK_DIR}/wp-cli.yml
+    chown -R www-data:www-data ${WORK_DIR}
+    chmod -R 777 ${WORK_DIR}
     
     # Backup current DB to a file
     wp db export /root/old_db.sql --allow-root 
@@ -36,35 +27,29 @@ if [ ! -f $WP_CONFIG_FILE ]; then
     wp db import /root/backup.sql --allow-root 
 
     # Change site paths
-    TARGET_URL=$URL_TESTING
-    if [ "$IS_PROD" = "true" ]; then
-        TARGET_URL=$URL_PROD
-    fi
-    
-    wp search-replace $URL1_TO_REPLACE $TARGET_URL --allow-root --all-tables 
-    wp search-replace $URL2_TO_REPLACE $TARGET_URL --allow-root --all-tables 
-    wp search-replace $URL3_TO_REPLACE $TARGET_URL --allow-root --all-tables 
-    wp search-replace $URL4_TO_REPLACE $TARGET_URL --allow-root --all-tables 
-    if [ "$IS_PROD" = "true" ]; then
-        wp search-replace 'http://' 'https://' --allow-root --all-tables 
-    fi
+    wp search-replace $URL1_TO_REPLACE $URL --allow-root --all-tables 
+    wp search-replace $URL2_TO_REPLACE $URL --allow-root --all-tables 
+    wp search-replace $URL3_TO_REPLACE $URL --allow-root --all-tables 
+    wp search-replace $URL4_TO_REPLACE $URL --allow-root --all-tables 
+
+    wp search-replace 'http://' 'https://' --allow-root --all-tables 
 
     wp theme activate $BACKUP_THEME_NAME --allow-root 
     wp theme activate $THEME_NAME --allow-root 
     wp rewrite flush --hard --allow-root 
 
-    mysql -h $DB_HOST -P 3306 -u $DB_USER -p$DB_PASS -D $DB_NAME <<EOF
-UPDATE wp_options SET option_value='$TARGET_URL' WHERE option_name='home';
-UPDATE wp_options SET option_value='$TARGET_URL' WHERE option_name='siteurl';
+    mysql -h $WORDPRESS_DB_HOST -P 3306 -u $WORDPRESS_DB_USER -p$WORDPRESS_DB_PASSWORD -D $WORDPRESS_DB_NAME <<EOF
+UPDATE wp_options SET option_value='$URL' WHERE option_name='home';
+UPDATE wp_options SET option_value='$URL' WHERE option_name='siteurl';
 EOF
 fi
 
-chown -R www-data:www-data $WORK_DIR
-chmod -R 777 $WORK_DIR
+chown -R www-data:www-data ${WORK_DIR}
+chmod -R 777 ${WORK_DIR}
 
 set +e
 # Remove object cache
-rm $WORK_DIR/wp-content/object-cache.php
+rm ${WORK_DIR}/wp-content/object-cache.php
 
 # for ssh ownership and security
 chown -R $USER:$USER /root/.ssh

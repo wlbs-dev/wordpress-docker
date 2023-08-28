@@ -23,9 +23,7 @@ $WORDPRESS_DB_HOST     = getenv('WORDPRESS_DB_HOST');
 $WORDPRESS_DB_USER     = getenv('WORDPRESS_DB_USER');
 $WORDPRESS_DB_PASSWORD = getenv('WORDPRESS_DB_PASSWORD');
 $WORDPRESS_DB_NAME     = getenv('WORDPRESS_DB_NAME');
-$URL_PROD              = getenv('URL_PROD');
-$URL_TESTING           = getenv('URL_TESTING');
-$IS_PROD               = getenv('IS_PROD');
+$URL              = getenv('URL');
 
 // ** Database settings - You can get this info from your web host ** //
 define( 'DB_NAME', $WORDPRESS_DB_NAME );
@@ -100,13 +98,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 /** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';
 
-if ($IS_PROD === 'true') {
-    define( 'WP_HOME', $URL_PROD );
-    define( 'WP_SITEURL', $URL_PROD );
-} else {
-    define( 'WP_HOME', $URL_TESTING );
-    define( 'WP_SITEURL', $URL_TESTING );
-}
+define( 'WP_HOME', $URL );
+define( 'WP_SITEURL', $URL );
+
 /**
  * For developers: WordPress debugging mode.
  *
