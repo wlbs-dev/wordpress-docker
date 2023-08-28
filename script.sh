@@ -28,12 +28,12 @@ if [ ! -f $WP_CONFIG_FILE ]; then
     chmod -R 777 $WORK_DIR
     
     # Backup current DB to a file
-    wp db export /root/old_db.sql --allow-root --path=$WORK_DIR
+    wp db export /root/old_db.sql --allow-root 
 
-    wp db reset --yes --allow-root --path=$WORK_DIR
+    wp db reset --yes --allow-root 
 
     # Import DB from sql file
-    wp db import /root/backup.sql --allow-root --path=$WORK_DIR
+    wp db import /root/backup.sql --allow-root 
 
     # Change site paths
     TARGET_URL=$URL_TESTING
@@ -41,17 +41,17 @@ if [ ! -f $WP_CONFIG_FILE ]; then
         TARGET_URL=$URL_PROD
     fi
     
-    wp search-replace $URL1_TO_REPLACE $TARGET_URL --allow-root --all-tables --path=$WORK_DIR
-    wp search-replace $URL2_TO_REPLACE $TARGET_URL --allow-root --all-tables --path=$WORK_DIR
-    wp search-replace $URL3_TO_REPLACE $TARGET_URL --allow-root --all-tables --path=$WORK_DIR
-    wp search-replace $URL4_TO_REPLACE $TARGET_URL --allow-root --all-tables --path=$WORK_DIR
+    wp search-replace $URL1_TO_REPLACE $TARGET_URL --allow-root --all-tables 
+    wp search-replace $URL2_TO_REPLACE $TARGET_URL --allow-root --all-tables 
+    wp search-replace $URL3_TO_REPLACE $TARGET_URL --allow-root --all-tables 
+    wp search-replace $URL4_TO_REPLACE $TARGET_URL --allow-root --all-tables 
     if [ "$IS_PROD" = "true" ]; then
-        wp search-replace 'http://' 'https://' --allow-root --all-tables --path=$WORK_DIR
+        wp search-replace 'http://' 'https://' --allow-root --all-tables 
     fi
 
-    wp theme activate $BACKUP_THEME_NAME --allow-root --path=$WORK_DIR
-    wp theme activate $THEME_NAME --allow-root --path=$WORK_DIR
-    wp rewrite flush --hard --allow-root --path=$WORK_DIR
+    wp theme activate $BACKUP_THEME_NAME --allow-root 
+    wp theme activate $THEME_NAME --allow-root 
+    wp rewrite flush --hard --allow-root 
 
     mysql -h $DB_HOST -P 3306 -u $DB_USER -p$DB_PASS -D $DB_NAME <<EOF
 UPDATE wp_options SET option_value='$TARGET_URL' WHERE option_name='home';
