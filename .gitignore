@@ -1,3 +1,4 @@
 example.com/
 wordpress/
 *.sql
+check_env.sh
