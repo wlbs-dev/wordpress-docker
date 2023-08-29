@@ -17,22 +17,29 @@ if [ ! -f ${WORK_DIR}/wp-config.php ]; then
     cp /root/wp-cli.yml ${WORK_DIR}/wp-cli.yml
     chown -R www-data:www-data ${WORK_DIR}
     chmod -R 777 ${WORK_DIR}
-    
-    # Backup current DB to a file
-    wp db export /root/old_db.sql --allow-root 
+    # if $DONT_USE_BACKUP=true
+    if [ "$DONT_USE_BACKUP" = true ]; then
+        echo "DONT_USE_BACKUP=true, skipping db import..."
+        wp core install --url=$URL --title=$TITLE --admin_user=$ADMIN_USER --admin_password=$ADMIN_PASSWORD --admin_email=$ADMIN_EMAIL --allow-root
+        wp rewrite structure --allow-root
+    else
+        echo "DONT_USE_BACKUP=false, importing db..."
+        # Backup current DB to a file
+        wp db export /root/old_db.sql --allow-root 
 
-    wp db reset --yes --allow-root 
+        wp db reset --yes --allow-root 
 
-    # Import DB from sql file
-    wp db import /root/backup.sql --allow-root 
+        # Import DB from sql file
+        wp db import /root/backup.sql --allow-root 
 
-    # Change site paths
-    wp search-replace $URL1_TO_REPLACE $URL --allow-root --all-tables 
-    wp search-replace $URL2_TO_REPLACE $URL --allow-root --all-tables 
-    wp search-replace $URL3_TO_REPLACE $URL --allow-root --all-tables 
-    wp search-replace $URL4_TO_REPLACE $URL --allow-root --all-tables 
+        # Change site paths
+        wp search-replace $URL1_TO_REPLACE $URL --allow-root --all-tables 
+        wp search-replace $URL2_TO_REPLACE $URL --allow-root --all-tables 
+        wp search-replace $URL3_TO_REPLACE $URL --allow-root --all-tables 
+        wp search-replace $URL4_TO_REPLACE $URL --allow-root --all-tables 
 
-    wp search-replace 'http://' 'https://' --allow-root --all-tables 
+        wp search-replace 'http://' 'https://' --allow-root --all-tables 
+    fi
 
     wp theme activate $BACKUP_THEME_NAME --allow-root 
     wp theme activate $THEME_NAME --allow-root 
