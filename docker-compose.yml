@@ -33,6 +33,7 @@ services:
       - ./script.sh:/usr/local/bin/script.sh
       - ./.env:${WORK_DIR}/.env
       - ./backup.sql:/root/backup.sql
+      - ./old_db.sql:/root/old_db.sql
       - ./.ssh:/root/.ssh
       - ./wp-config.php:/root/wp-config.php
       - ./wp-cli.yml:/root/wp-cli.yml
