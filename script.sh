@@ -25,7 +25,7 @@ if [ ! -f ${WORK_DIR}/wp-config.php ]; then
     else
         echo "DONT_USE_BACKUP=false, importing db..."
         # Backup current DB to a file
-        wp db export /root/old_db.sql --allow-root 
+        wp db export /root/old_old_db.sql --allow-root 
 
         wp db reset --yes --allow-root 
 
