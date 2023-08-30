@@ -4,3 +4,4 @@ wordpress/
 check_env.sh
 output.sh
 .env
+learn/
