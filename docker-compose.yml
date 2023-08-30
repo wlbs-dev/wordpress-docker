@@ -6,10 +6,10 @@ services:
     deploy:
         resources:
             limits:
-              cpus: 0.2
+              cpus: '0.2'
               memory: 512M
             reservations:
-              cpus: 0.1
+              cpus: '0.1'
               memory: 128M
     volumes:
       - db_data:/var/lib/mysql
@@ -24,10 +24,10 @@ services:
     deploy:
         resources:
             limits:
-              cpus: 0.2
+              cpus: '0.2'
               memory: 256M
             reservations:
-              cpus: 0.1
+              cpus: '0.1'
               memory: 128M
     depends_on:
       - db
