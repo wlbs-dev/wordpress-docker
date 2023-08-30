@@ -31,11 +31,7 @@ services:
               memory: 128M
     depends_on:
       - db
-    build:
-      context: .
-      args:
-        - WORK_DIR=${WORK_DIR}
-        - EXPOSE_PORT=${EXPOSE_PORT}
+    image: ${DOCKER_NAME}
     ports:
       - "${EXPOSE_PORT}:443"
     environment:
