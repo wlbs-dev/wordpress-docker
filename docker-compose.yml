@@ -32,9 +32,6 @@ services:
     depends_on:
       - db
     image: ${DOCKER_NAME}
-    build:
-      context: ./${DOCKER_NAME}
-      dockerfile: Dockerfile
     ports:
       - "${EXPOSE_PORT}:443"
     environment:

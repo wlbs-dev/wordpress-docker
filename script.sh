@@ -9,7 +9,9 @@ until mysqladmin ping -h $WORDPRESS_DB_HOST -P 3306 -u $WORDPRESS_DB_USER -p$WOR
     echo 'waiting for mysqld to be connectable...'
     sleep 2
 done
-
+if [ -f ${WORK_DIR}/wp-config.php ]; then
+    rm ${WORK_DIR}/wp-config.php
+fi
 # Check if wp-config.php exists
 if [ ! -f ${WORK_DIR}/wp-config.php ]; then
     echo "wp-config.php not found, resetting db..."
