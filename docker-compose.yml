@@ -3,7 +3,7 @@ version: '3.8'
 services:
   db:
     image: mysql:8.0
-    mem_limit: 256M
+    mem_limit: 512M
     volumes:
       - db_data:/var/lib/mysql
       - ./mysql-files:/var/lib/mysql-files
