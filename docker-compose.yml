@@ -3,7 +3,14 @@ version: '3.8'
 services:
   db:
     image: mysql:8.0
-    mem_limit: 512M
+    deploy:
+        resources:
+            limits:
+              cpus: 0.2
+              memory: 512M
+            reservations:
+              cpus: 0.1
+              memory: 128M
     volumes:
       - db_data:/var/lib/mysql
       - ./mysql-files:/var/lib/mysql-files
@@ -14,7 +21,14 @@ services:
       MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
 
   wordpress:
-    mem_limit: 256M
+    deploy:
+        resources:
+            limits:
+              cpus: 0.2
+              memory: 256M
+            reservations:
+              cpus: 0.1
+              memory: 128M
     depends_on:
       - db
     build:
