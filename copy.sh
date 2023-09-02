@@ -40,12 +40,26 @@ mv ${DEST_PATH} backup.sql
 echo "File renamed successfully."
 
 # Ask user if they want to push backup to S3
-read -p "Do you want to push backup to S3? (y/n): " -n 1 -r
-echo    # Move to a new line
+# Allow user to pass flag --s3 to skip this prompt
+if [[ $1 == "--s3" ]]; then
+    echo "Skipping prompt to push backup to S3."
+    $REPLY="y"
+    exit 0
+else
+    echo "Prompting user to push backup to S3."
+    read -p "Do you want to push backup to S3? (y/n): " -n 1 -r
+    echo    # Move to a new line
+fi
+
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # Folder should be set in environment variable
     # Upload to S3 using aws-cli
-    aws s3 cp backup.sql "s3://${S3_BACKUP_LOCATION}/backup_${DATE}.sql"
+    # if $URL contains localhost call it local_backup
+    if [[ $URL == *"localhost"* ]]; then
+        aws s3 cp backup.sql "s3://${S3_BACKUP_LOCATION}/local_backup_${DATE}.sql"
+    else
+        aws s3 cp backup.sql "s3://${S3_BACKUP_LOCATION}/remote_backup_${DATE}.sql"
+    fi
     echo "File uploaded to S3 successfully."
 fi
