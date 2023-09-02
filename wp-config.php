@@ -24,6 +24,7 @@ $WORDPRESS_DB_USER     = getenv('WORDPRESS_DB_USER');
 $WORDPRESS_DB_PASSWORD = getenv('WORDPRESS_DB_PASSWORD');
 $WORDPRESS_DB_NAME     = getenv('WORDPRESS_DB_NAME');
 $URL              = getenv('URL');
+$TABLE_PRE = getenv('TABLE_PREFIX');
 
 // ** Database settings - You can get this info from your web host ** //
 define( 'DB_NAME', $WORDPRESS_DB_NAME );
@@ -73,7 +74,7 @@ define( 'WP_CACHE_KEY_SALT', 'put your unique phrase here' );
  * You can have multiple installations in one database if you give each
  * a unique prefix. Only numbers, letters, and underscores please!
  */
-$table_prefix = 'wp_';
+$table_prefix = $TABLE_PRE;
 
 
 /* Add any custom values between this line and the "stop editing" line. */

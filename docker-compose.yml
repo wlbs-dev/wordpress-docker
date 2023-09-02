@@ -15,11 +15,7 @@ services:
   wordpress:
     depends_on:
       - db
-    build:
-      context: .
-      args:
-        - WORK_DIR=${WORK_DIR}
-        - EXPOSE_PORT=${EXPOSE_PORT}
+    image: ${DOCKER_NAME}
     ports:
       - "${EXPOSE_PORT}:443"
     environment:
@@ -28,6 +24,7 @@ services:
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
       URL: ${URL}
+      TABLE_PREFIX: ${TABLE_PREFIX}
     volumes:
       - ./wordpress:${WORK_DIR}/
       - ./script.sh:/usr/local/bin/script.sh
