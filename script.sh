@@ -4,6 +4,8 @@ set -e
 # Load environment variables from .env file
 source .env
 
+cd ${WORK_DIR}
+
 # Wait for MySQL
 until mysqladmin ping -h $WORDPRESS_DB_HOST -P 3306 -u $WORDPRESS_DB_USER -p$WORDPRESS_DB_PASSWORD; do
     echo 'waiting for mysqld to be connectable...'
@@ -46,8 +48,8 @@ if [ ! -f ${WORK_DIR}/wp-config.php ]; then
     wp rewrite flush --hard --allow-root 
 
     mysql -h $WORDPRESS_DB_HOST -P 3306 -u $WORDPRESS_DB_USER -p$WORDPRESS_DB_PASSWORD -D $WORDPRESS_DB_NAME <<EOF
-UPDATE wp_options SET option_value='$URL' WHERE option_name='home';
-UPDATE wp_options SET option_value='$URL' WHERE option_name='siteurl';
+UPDATE ${TABLE_PREFIX}options SET option_value='$URL' WHERE option_name='home';
+UPDATE ${TABLE_PREFIX}options SET option_value='$URL' WHERE option_name='siteurl';
 EOF
 fi
 

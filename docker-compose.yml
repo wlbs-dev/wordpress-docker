@@ -15,7 +15,8 @@ services:
   wordpress:
     depends_on:
       - db
-    image: ${DOCKER_NAME}
+    build:
+      context: .
     ports:
       - "${EXPOSE_PORT}:443"
     environment:
@@ -28,7 +29,7 @@ services:
     volumes:
       - ./wordpress:${WORK_DIR}/
       - ./script.sh:/usr/local/bin/script.sh
-      - ./.env:${WORK_DIR}/.env
+      - ./.env:/usr/local/bin/.env
       - ./backup.sql:/root/backup.sql
       - ./old_db.sql:/root/old_db.sql
       - ./.ssh:/root/.ssh
