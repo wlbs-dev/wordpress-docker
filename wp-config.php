@@ -126,5 +126,7 @@ if ( ! function_exists( 'console_log' ) ) {
     function console_log() {
     }
 }
+// Fixes one FTP error
+if ( ! defined( 'FS_METHOD' ) ) define( 'FS_METHOD', 'direct' );
 
 /* That's all, stop editing! Happy publishing. */
