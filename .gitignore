@@ -6,3 +6,4 @@ output.sh
 .env
 learn/
 components/
+.env.staging
