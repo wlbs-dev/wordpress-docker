@@ -6,6 +6,11 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - ./mysql-files:/var/lib/mysql-files
+    deploy:
+      resources:
+        limits:
+          cpus: '0.4'
+          memory: 512M
     environment:
       MYSQL_ROOT_PASSWORD: change_me_root_password
       MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
@@ -19,6 +24,11 @@ services:
       context: .
     ports:
       - "${EXPOSE_PORT}:443"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.4'
+          memory: 256M
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
