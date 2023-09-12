@@ -23,7 +23,7 @@ echo "Running backup script..."
 date_time=\$(date +"%Y%m%d%H%M%S")
 
 # Your regex pattern for table names
-pattern=".*orders.*"
+pattern=".*order.*"
 
 # Get a list of tables matching the pattern from the database
 tables=\$(mysql -h \$MYSQL_HOST -P \$MYSQL_PORT -u \$MYSQL_USER -p\$MYSQL_PASSWORD \$MYSQL_DATABASE -N -e "SELECT table_name FROM information_schema.tables WHERE table_name REGEXP '\$pattern'")
