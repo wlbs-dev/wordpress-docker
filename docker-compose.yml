@@ -45,5 +45,26 @@ services:
       - ./.ssh:/root/.ssh
       - ./wp-config.php:/root/wp-config.php
       - ./wp-cli.yml:/root/wp-cli.yml
+      - signal_volume:/signal
+  
+  db-backup:
+    image: alpine
+    volumes:
+      - ./backup.sh:/backup.sh
+      - db_backup:/db_backup
+      - signal_volume:/signal
+    environment:
+      MYSQL_HOST: db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root_password
+      MYSQL_DATABASE: wordpress
+      S3_BUCKET: your_s3_bucket
+      AWS_ACCESS_KEY_ID: your_aws_access_key
+      AWS_SECRET_ACCESS_KEY: your_aws_secret_key
+    command: sh -c "chmod +x /backup.sh && crond -f"
+    depends_on:
+      - db
 volumes:
   db_data: {}
+  db_backup: {}
+  signal_volume: {}
