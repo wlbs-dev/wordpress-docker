@@ -27,7 +27,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.4'
+          cpus: '0.5'
           memory: 768M
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
@@ -53,15 +53,16 @@ services:
       - ./backup.sh:/backup.sh
       - db_backup:/db_backup
       - signal_volume:/signal
+      - ./.env:/.env
     environment:
       MYSQL_HOST: db
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root_password
-      MYSQL_DATABASE: wordpress
-      S3_BUCKET: your_s3_bucket
-      AWS_ACCESS_KEY_ID: your_aws_access_key
-      AWS_SECRET_ACCESS_KEY: your_aws_secret_key
-    command: sh -c "chmod +x /backup.sh && crond -f"
+      MYSQL_USER: ${WORDPRESS_DB_USER}
+      MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
+      S3_BUCKET: ${S3_BACKUP_LOCATION}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+    command: sh -c "chmod +x /backup.sh && /backup.sh"
     depends_on:
       - db
 volumes:
