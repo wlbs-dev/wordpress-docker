@@ -1,5 +1,5 @@
 FROM alpine:latest
 
 # Install required packages
-RUN apk add --no-cache mysql-client aws-cli
+RUN apk add --no-cache mysql-client aws-cli inotify-tools
 

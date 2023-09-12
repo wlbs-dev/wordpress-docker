@@ -58,7 +58,8 @@ services:
       - signal_volume:/signal
       - ./.env:/.env
     environment:
-      MYSQL_HOST: db
+      MYSQL_HOST: ${WORDPRESS_DB_HOST}
+      MYSQL_PORT: 3306
       MYSQL_USER: ${WORDPRESS_DB_USER}
       MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
       MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
