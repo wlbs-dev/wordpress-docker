@@ -1,6 +1,12 @@
 #!/bin/sh
 set -e
 
+# Wait for MySQL to be connectable
+until mysqladmin ping -h "$MYSQL_HOST" -P "$MYSQL_PORT" -u "$MYSQL_USER" -p"$MYSQL_PASSWORD"; do
+  echo 'Waiting for MySQL to be connectable...'
+  sleep 2
+done
+
 # setting IST
 export TZ=Asia/Kolkata
 
@@ -47,7 +53,7 @@ date_time=\$(date +"%Y%m%d%H%M%S")
 
 mysqldump -h \$MYSQL_HOST -P \$MYSQL_PORT -u \$MYSQL_USER -p\$MYSQL_PASSWORD \$MYSQL_DATABASE > /db_backup/full_dump.sql
 
-aws s3 cp /db_backup/full_dump.sql s3://\$S3_BUCKET/complete_db/full_dump_\$date_time.sql
+aws s3 cp /db_backup/full_dump.sql s3://\$S3_BUCKET/database_backups/full_dump_\$date_time.sql
 EOF
 chmod +x /run_full_backup.sh
 

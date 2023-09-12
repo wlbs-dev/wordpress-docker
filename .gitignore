@@ -1,6 +1,6 @@
 example.com/
 wordpress/
-*.sql
+backup*.sql
 check_env.sh
 output.sh
 .env

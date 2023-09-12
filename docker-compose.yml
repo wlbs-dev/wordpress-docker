@@ -12,7 +12,7 @@ services:
           cpus: '0.4'
           memory: 1024M
     environment:
-      MYSQL_ROOT_PASSWORD: change_me_root_password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
       MYSQL_USER: ${WORDPRESS_DB_USER}
       MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
@@ -60,8 +60,8 @@ services:
     environment:
       MYSQL_HOST: ${WORDPRESS_DB_HOST}
       MYSQL_PORT: 3306
-      MYSQL_USER: ${WORDPRESS_DB_USER}
-      MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
       TABLE_PREFIX: ${TABLE_PREFIX}
       S3_BUCKET: ${S3_BACKUP_LOCATION}
