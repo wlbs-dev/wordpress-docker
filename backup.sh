@@ -70,5 +70,5 @@ done &
 while true; do
   echo "Running full database backup..."
   /run_full_backup.sh
-  sleep 600
+  sleep ${FULL_BACKUP_INTERVAL}
 done
