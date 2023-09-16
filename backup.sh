@@ -12,21 +12,32 @@ cleanup_old_backups() {
   # try this 3 times before failing
   aws s3 ls s3://${S3_BUCKET}/database_backups/ || aws s3 ls s3://${S3_BUCKET}/database_backups/ || aws s3 ls s3://${S3_BUCKET}/database_backups/
   
+  # Variable to store backup dates already processed
+  processed_dates=""
+  
   # Existing logic
   for backup in $(aws s3 ls s3://${S3_BUCKET}/database_backups/ | awk '{print $4}' | sort); do
     backup_date=$(echo $backup | awk -F'_' '{print substr($3,1,8)}')
     echo "Checking backup: $backup with date: $backup_date"
+    
     if [ "$backup_date" -le "$two_days_ago" ]; then
-      echo "Deleting old backup: $backup"
-      # if delete fails, try again 1 more time otherwise skip
-      aws s3 rm s3://${S3_BUCKET}/database_backups/$backup ||
-      aws s3 rm s3://${S3_BUCKET}/database_backups/$backup || echo "Failed to delete backup: $backup"
-
+      # Check if this date is already processed
+      if echo "$processed_dates" | grep -q "$backup_date"; then
+        echo "Deleting old backup: $backup"
+        # if delete fails, try again 1 more time otherwise skip
+        aws s3 rm s3://${S3_BUCKET}/database_backups/$backup ||
+        aws s3 rm s3://${S3_BUCKET}/database_backups/$backup || echo "Failed to delete backup: $backup"
+      else
+        # Mark this date as processed
+        processed_dates="$processed_dates $backup_date"
+        echo "Skipping first backup of the day: $backup"
+      fi
     fi
   done
   
   echo "Cleanup complete."
 }
+
 
 # Call cleanup function
 cleanup_old_backups
