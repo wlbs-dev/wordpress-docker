@@ -32,7 +32,7 @@ if [ ! -f ${WORK_DIR}/wp-config.php ]; then
         wp db reset --yes --allow-root 
 
         # Import DB from sql file
-        wp db import /root/backup.sql --allow-root 
+        wp db import /root/backups/backup.sql --allow-root 
 
         # Change site paths
         wp search-replace $URL1_TO_REPLACE $URL --allow-root --all-tables 

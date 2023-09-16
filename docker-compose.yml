@@ -8,7 +8,7 @@ services:
       - ./wait-for-backup.sh:/docker-entrypoint-initdb.d/wait-for-backup.sh
       - db_data:/var/lib/mysql
       - ./mysql-files:/var/lib/mysql-files
-      - ./backup.sql:/root/backup.sql
+      - ./backups:/root/backups
     deploy:
       resources:
         limits:
@@ -43,7 +43,7 @@ services:
       - ./wordpress:${WORK_DIR}/
       - ./script.sh:/usr/local/bin/script.sh
       - ./.env:/usr/local/bin/.env
-      - ./backup.sql:/root/backup.sql
+      - ./backups:/root/backups
       - ./old_db.sql:/root/old_db.sql
       - ./.ssh:/root/.ssh
       - ./wp-config.php:/root/wp-config.php
@@ -60,7 +60,7 @@ services:
       - db_backup:/db_backup
       - signal_volume:/signal
       - ./.env:/.env
-      - ./backup.sql:/root/backup.sql
+      - ./backups:/root/backups
     environment:
       MYSQL_HOST: ${WORDPRESS_DB_HOST}
       MYSQL_PORT: 3306

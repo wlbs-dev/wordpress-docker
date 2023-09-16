@@ -2,11 +2,15 @@
 set -e
 
 # Check if backup.sql exists, if not, fetch the latest from S3 based on naming convention
-if [ ! -f /root/backup.sql ]; then
+if [ ! -f /root/backups/backup.sql ]; then
   echo "backup.sql does not exist. Fetching latest from S3..."
-  latest_backup=$(aws s3 ls s3://${S3_BACKUP_LOCATION}/database_backups/ | sort | tail -n 1 | awk '{print $4}')
+  echo "checking location s3://${S3_BUCKET}/database_backups/"
+  aws s3 ls s3://${S3_BUCKET}/database_backups/
+  latest_backup=$(aws s3 ls s3://${S3_BUCKET}/database_backups/ | sort | tail -n 1 | awk '{print $4}')
+  echo "Latest backup: ${latest_backup}"
   if [ ! -z "$latest_backup" ]; then
-    aws s3 cp s3://${S3_BACKUP_LOCATION}/database_backups/${latest_backup} /root/backup.sql
+    echo "Downloading latest backup from S3..."
+    aws s3 cp s3://${S3_BUCKET}/database_backups/${latest_backup} /root/backups/backup.sql
   else
     echo "No backups found in S3. Exiting."
     exit 1
@@ -79,7 +83,8 @@ inotifywait -m /signal -e create --format '%w%f' | while read file; do
 done &
 
 while true; do
+  echo "Sleeping for ${FULL_BACKUP_INTERVAL} seconds before running full database backup..."
+  sleep ${FULL_BACKUP_INTERVAL}
   echo "Running full database backup..."
   /run_full_backup.sh
-  sleep ${FULL_BACKUP_INTERVAL}
 done
