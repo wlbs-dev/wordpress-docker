@@ -3,9 +3,12 @@ version: '3.8'
 services:
   db:
     image: mysql:8.0
+    entrypoint: ["sh", "-c", "chmod +x /docker-entrypoint-initdb.d/wait-for-backup.sh && /docker-entrypoint-initdb.d/wait-for-backup.sh && exec docker-entrypoint.sh mysqld"]
     volumes:
+      - ./wait-for-backup.sh:/docker-entrypoint-initdb.d/wait-for-backup.sh
       - db_data:/var/lib/mysql
       - ./mysql-files:/var/lib/mysql-files
+      - ./backup.sql:/root/backup.sql
     deploy:
       resources:
         limits:
@@ -57,6 +60,7 @@ services:
       - db_backup:/db_backup
       - signal_volume:/signal
       - ./.env:/.env
+      - ./backup.sql:/root/backup.sql
     environment:
       MYSQL_HOST: ${WORDPRESS_DB_HOST}
       MYSQL_PORT: 3306

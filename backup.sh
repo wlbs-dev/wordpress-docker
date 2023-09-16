@@ -1,6 +1,18 @@
 #!/bin/sh
 set -e
 
+# Check if backup.sql exists, if not, fetch the latest from S3 based on naming convention
+if [ ! -f /root/backup.sql ]; then
+  echo "backup.sql does not exist. Fetching latest from S3..."
+  latest_backup=$(aws s3 ls s3://${S3_BACKUP_LOCATION}/database_backups/ | sort | tail -n 1 | awk '{print $4}')
+  if [ ! -z "$latest_backup" ]; then
+    aws s3 cp s3://${S3_BACKUP_LOCATION}/database_backups/${latest_backup} /root/backup.sql
+  else
+    echo "No backups found in S3. Exiting."
+    exit 1
+  fi
+fi
+
 # Wait for MySQL to be connectable
 until mysqladmin ping -h "$MYSQL_HOST" -P "$MYSQL_PORT" -u "$MYSQL_USER" -p"$MYSQL_PASSWORD"; do
   echo 'Waiting for MySQL to be connectable...'
@@ -66,7 +78,6 @@ inotifywait -m /signal -e create --format '%w%f' | while read file; do
   fi
 done &
 
-# Every 5 minutes, run the full database backup script
 while true; do
   echo "Running full database backup..."
   /run_full_backup.sh
