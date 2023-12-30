@@ -58,7 +58,8 @@ RUN service apache2 restart
 # update post_max_size from 8M to 100M
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini && \
     sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/g' /usr/local/etc/php/php.ini && \
-    sed -i 's/post_max_size = 8M/post_max_size = 50M/g' /usr/local/etc/php/php.ini
+    sed -i 's/post_max_size = 8M/post_max_size = 50M/g' /usr/local/etc/php/php.ini && \
+    sed -i 's/memory_limit = 128M/memory_limit = 1024M/g' /usr/local/etc/php/php.ini
 
 # Start Apache in the foreground and execute your script
 CMD /usr/local/bin/script.sh; apache2-foreground
