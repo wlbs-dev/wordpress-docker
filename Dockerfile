@@ -59,7 +59,10 @@ RUN service apache2 restart
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini && \
     sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/g' /usr/local/etc/php/php.ini && \
     sed -i 's/post_max_size = 8M/post_max_size = 50M/g' /usr/local/etc/php/php.ini && \
-    sed -i 's/memory_limit = 128M/memory_limit = 1024M/g' /usr/local/etc/php/php.ini
+    sed -i 's/memory_limit = 128M/memory_limit = 1024M/g' /usr/local/etc/php/php.ini && \
+    sed -i 's/;error_log = php_errors.log/error_log = \/var\/www\/html\/php-logs\/php_error.log/g' /usr/local/etc/php/php.ini && \
+    sed -i 's/;log_errors = On/log_errors = On/g' /usr/local/etc/php/php.ini && \
+    sed -i 's/;error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT/error_reporting = E_ALL/g' /usr/local/etc/php/php.ini
 
 # Start Apache in the foreground and execute your script
 CMD /usr/local/bin/script.sh; apache2-foreground
