@@ -31,7 +31,7 @@ services:
       resources:
         limits:
           cpus: '1'
-          memory: 768M
+          memory: 2048M
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
