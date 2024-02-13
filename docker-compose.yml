@@ -13,7 +13,7 @@ services:
       resources:
         limits:
           cpus: '0.5'
-          memory: 768M
+          memory: 1G
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
@@ -30,8 +30,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.5'
-          memory: 1300M
+          cpus: '1'
+          memory: 2G
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
