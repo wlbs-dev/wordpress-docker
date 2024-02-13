@@ -13,7 +13,7 @@ services:
       resources:
         limits:
           cpus: '0.5'
-          memory: 1024M
+          memory: 768M
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
@@ -30,8 +30,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
-          memory: 768M
+          cpus: '1.5'
+          memory: 1300M
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
@@ -52,6 +52,11 @@ services:
   
   db-backup:
     image: alpine
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 128M
     build: 
       context: .
       dockerfile: Dockerfile.alpine
