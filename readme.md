@@ -10,54 +10,53 @@ This repository provides a Docker-based setup for quickly deploying new WordPres
 #### Installation Steps
 
 1. **Clone the Repository**: 
-   ```
+   ```sh
    git clone https://github.com/wlbs-dev/wordpress-docker.git
    ```
    
 2. **Navigate to the Directory**:
-   ```
+   ```sh
    cd wordpress-docker
    ```
 
 3. **Create Environment File**: 
    Make an environment file named `.env` inside the `wordpress-docker` directory. Populate it with the following variables:
-   ```
-# Environment Variables
 
-# Database Configuration
-WORDPRESS_DB_HOST=db                  # Hostname of the MySQL database
-WORDPRESS_DB_PORT=3306                # Port of the MySQL database
-WORDPRESS_DB_USER=                    # Username for accessing the WordPress database
-WORDPRESS_DB_PASSWORD=                # Password for accessing the WordPress database
-WORDPRESS_DB_NAME=                    # Name of the WordPress database
-MYSQL_ROOT_PASSWORD=                  # Root password for the MySQL database
+   ```sh
+   # Environment Variables
+   # Database Configuration
+   WORDPRESS_DB_HOST=db                  # Hostname of the MySQL database
+   WORDPRESS_DB_PORT=3306                # Port of the MySQL database
+   WORDPRESS_DB_USER=                    # Username for accessing the WordPress database
+   WORDPRESS_DB_PASSWORD=                # Password for accessing the WordPress database
+   WORDPRESS_DB_NAME=                    # Name of the WordPress database
+   MYSQL_ROOT_PASSWORD=                  # Root password for the MySQL database
 
-# WordPress Configuration
-WORK_DIR=/var/www/html                # WordPress working directory
-THEME_NAME=                           # Name of the active WordPress theme
-BACKUP_THEME_NAME=                    # Name of the theme used for backups (if different)
-DONT_USE_BACKUP=                      # Flag to disable backup functionality (if set to any value)
-URL1_TO_REPLACE=http://localhost:8000/  # Placeholder URL for search and replace
-URL2_TO_REPLACE=                      # Additional placeholder URL for search and replace
-URL3_TO_REPLACE=                      # Additional placeholder URL for search and replace
-URL4_TO_REPLACE=                      # Additional placeholder URL for search and replace
-URL=https://localhost:8000/           # Main URL of the WordPress site
-EXPOSE_PORT=8000                      # Port to expose WordPress (e.g., for accessing the site)
+   # WordPress Configuration
+   WORK_DIR=/var/www/html                # WordPress working directory
+   THEME_NAME=                           # Name of the active WordPress theme
+   BACKUP_THEME_NAME=                    # Name of the theme used for backups (if different)
+   DONT_USE_BACKUP=                      # Flag to disable backup functionality (if set to any value)
+   URL1_TO_REPLACE=http://localhost:8000/  # Placeholder URL for search and replace
+   URL2_TO_REPLACE=                      # Additional placeholder URL for search and replace
+   URL3_TO_REPLACE=                      # Additional placeholder URL for search and replace
+   URL4_TO_REPLACE=                      # Additional placeholder URL for search and replace
+   URL=https://localhost:8000/           # Main URL of the WordPress site
+   EXPOSE_PORT=8000                      # Port to expose WordPress (e.g., for accessing the site)
 
-# WordPress Site Configuration
-TITLE=                                # Title of the WordPress site
-ADMIN_USER=admin_user                 # Admin username for WordPress login
-ADMIN_PASSWORD=                       # Admin password for WordPress login
-ADMIN_EMAIL=admin.mail@gmail.com      # Admin email address for WordPress
+   # WordPress Site Configuration
+   TITLE=                                # Title of the WordPress site
+   ADMIN_USER=admin_user                 # Admin username for WordPress login
+   ADMIN_PASSWORD=                       # Admin password for WordPress login
+   ADMIN_EMAIL=admin.mail@gmail.com      # Admin email address for WordPress
 
-# Miscellaneous Configuration
-TABLE_PREFIX=                         # Prefix for WordPress database tables (if desired)
-DOCKER_NAME=                          # Name for the Docker container
-S3_BACKUP_LOCATION=your-bucket/wordpress/backups/local  # Location for storing backups in AWS S3
-AWS_ACCESS_KEY_ID=                    # AWS Access Key ID for S3 backup storage
-AWS_SECRET_ACCESS_KEY=                # AWS Secret Access Key for S3 backup storage
-FULL_BACKUP_INTERVAL=1800             # Interval for full backups in seconds
-
+   # Miscellaneous Configuration
+   TABLE_PREFIX=                         # Prefix for WordPress database tables (if desired)
+   DOCKER_NAME=                          # Name for the Docker container
+   S3_BACKUP_LOCATION=  # Location for storing backups in AWS S3
+   AWS_ACCESS_KEY_ID=                    # AWS Access Key ID for S3 backup storage
+   AWS_SECRET_ACCESS_KEY=                # AWS Secret Access Key for S3 backup storage
+   FULL_BACKUP_INTERVAL=1800             # Interval for full backups in seconds
    ```
    Fill in the values for each variable according to your setup.
 
@@ -69,7 +68,8 @@ FULL_BACKUP_INTERVAL=1800             # Interval for full backups in seconds
 
 6. **Run Docker Compose**:
    Execute the following command to start the Docker containers:
-   ```
+
+   ```sh
    docker compose up --build
    ```
 
