@@ -40,7 +40,7 @@ services:
       URL: ${URL}
       TABLE_PREFIX: ${TABLE_PREFIX}
     volumes:
-      - ./wordpress:/var/www/html
+      - ./wordpress:${WORK_DIR}/
       - ./script.sh:/usr/local/bin/script.sh
       - ./.env:/usr/local/bin/.env
       - ./backups:/root/backups
