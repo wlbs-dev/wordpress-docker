@@ -4,7 +4,8 @@ This repository provides a Docker-based setup for quickly deploying new WordPres
 
 #### Prerequisites
 
-Ensure that you have Docker installed and running on your system before proceeding with the setup.
+- Installed docker & docker-compose and running on your system before proceeding with the setup.
+- Installed git
 
 #### Installation Steps
 
