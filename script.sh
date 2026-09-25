@@ -18,7 +18,8 @@ if [ ! -f ${WORK_DIR}/wp-config.php ]; then
     cp /root/wp-config.php ${WORK_DIR}/wp-config.php
     cp /root/wp-cli.yml ${WORK_DIR}/wp-cli.yml
     chown -R www-data:www-data ${WORK_DIR}
-    chmod -R 777 ${WORK_DIR}
+    find ${WORK_DIR} -type d -exec chmod 755 {} +
+    find ${WORK_DIR} -type f -exec chmod 644 {} +
     # if $DONT_USE_BACKUP=true
     if [ "$DONT_USE_BACKUP" = true ]; then
         echo "DONT_USE_BACKUP=true, skipping db import..."
@@ -54,7 +55,8 @@ EOF
 fi
 
 chown -R www-data:www-data ${WORK_DIR}
-chmod -R 777 ${WORK_DIR}
+find ${WORK_DIR} -type d -exec chmod 755 {} +
+find ${WORK_DIR} -type f -exec chmod 644 {} +
 
 set +e
 # Remove object cache
